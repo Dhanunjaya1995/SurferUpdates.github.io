@@ -7,209 +7,281 @@
   <link href="https://unpkg.com/tabulator-tables@5.4.4/dist/css/tabulator.min.css" rel="stylesheet"/>
   <style>
     :root {
-      --page-bg: #f0f0f0;
-      --table-bg: #ffffff;
-      --header-bg: #00796b;
-      --header-color: #ffffff;
-      --stripe-even: #f9f9f9;
+      /* LOGIN (dark) */
+      --login-bg: #1e1e1e;
+      --login-surface: #2e2e2e;
+      --login-accent: #00796b;
+      --login-accent-light: #009688;
+      --login-text: #e0e0e0;
+      --login-text-muted: #aaa;
+      --error: #d32f2f;
+
+      /* TABLE (light) */
+      --page-bg:     #f0f0f0;
+      --table-bg:    #ffffff;
+      --header-bg:   #00796b;
+      --header-color:#ffffff;
       --stripe-odd:  #ffffff;
-      --hover-bg:  #c8e6c9;
-      --border:    #dddddd;
-      --text:      #333333;
+      --stripe-even: #f9f9f9;
+      --hover-bg:    #c8e6c9;
+      --border:      #dddddd;
+      --text:        #333333;
+      --text-muted:  #636e72;
+
+      /* grouping */
+      --accent-dark: #005b4f;
     }
 
+    /* reset & layout */
     * { box-sizing: border-box; margin:0; padding:0; }
     html, body {
       height:100%; width:100%;
-      font-family: Arial, sans-serif;
-      background: var(--page-bg);
-      color: var(--text);
+      font-family:Arial,sans-serif;
+      background:var(--page-bg);
+      color:var(--text);
     }
 
+    /* LOGIN */
+    #login {
+      position:absolute; top:0; left:0; right:0; bottom:0;
+      display:flex; align-items:center; justify-content:center;
+      background:var(--login-bg);
+    }
+    #login .card {
+      background:var(--login-surface);
+      padding:30px; border-radius:8px;
+      box-shadow:0 2px 10px rgba(0,0,0,0.5);
+      width:90%; max-width:400px;
+    }
+    #login h1 {
+      margin-bottom:20px; text-align:center;
+      color:var(--login-accent-light);
+    }
+    #login label {
+      display:block; margin-top:15px;
+      font-size:0.9em; color:var(--login-text-muted);
+    }
+    #login input {
+      width:100%; padding:8px; margin-top:5px;
+      background:#383838; border:1px solid var(--login-accent);
+      border-radius:4px; color:var(--login-text);
+      font-size:1em;
+    }
+    #login button {
+      width:100%; padding:10px; margin-top:20px;
+      background:var(--login-accent); border:none;
+      border-radius:4px; color:#fff; font-size:1em;
+      cursor:pointer;
+    }
+    #login button:hover {
+      background:var(--login-accent-light);
+    }
+    #login .error {
+      display:none; color:var(--error);
+      margin-top:10px; text-align:center;
+    }
+
+    /* MAIN APP */
     #app {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      width: 100vw;
+      display:none; flex-direction:column;
+      height:100%; width:100%;
     }
     #app header {
-      background: var(--header-bg);
-      color: var(--header-color);
-      text-align: center;
-      padding: 15px;
-      font-size: 1.5em;
-      flex-shrink: 0;
-    }
-    #table {
-      flex: 1;
-      background: var(--table-bg);
-      padding: 10px;
-      overflow: auto;
-    }
-    #file-input-wrapper {
-      display: none;
-      padding: 10px;
-      text-align: center;
-      color: var(--text);
-      background: var(--table-bg);
+      background:var(--header-bg); color:var(--header-color);
+      text-align:center; padding:15px; font-size:1.5em;
+      flex-shrink:0;
     }
 
-    /* Tabulator light theme overrides */
-    .tabulator {
-      border: 1px solid var(--border) !important;
-      border-radius: 4px !important;
-      background: var(--table-bg) !important;
-      width: 100% !important;
+    /* TABLE AREA */
+    #table {
+      flex:1; background:var(--table-bg);
+      padding:10px; overflow:auto; width:100%;
     }
-    /* Column headers */
+    #file-input-wrapper {
+      display:none; padding:10px;
+      text-align:center; color:var(--text-muted);
+      background:var(--table-bg);
+    }
+
+    /* TABULATOR OVERRIDES */
+    .tabulator {
+      border:1px solid var(--border)!important;
+      border-radius:4px!important;
+      background:var(--table-bg)!important;
+      width:100%!important;
+    }
     .tabulator .tabulator-col {
-      background-color: var(--header-bg) !important;
-      color: var(--header-color) !important;
-      border-right: 1px solid var(--border) !important;
+      background:var(--header-bg)!important;
+      color:var(--header-color)!important;
+      border-right:1px solid var(--border)!important;
     }
     .tabulator .tabulator-col:last-child {
-      border-right: none !important;
+      border-right:none!important;
     }
     .tabulator .tabulator-col-title {
-      color: var(--header-color) !important;
+      color:var(--header-color)!important;
     }
-    /* Header filters row (inputs) */
     .tabulator .tabulator-header-filter input {
-      background: var(--table-bg) !important;
-      color: var(--text) !important;
-      border: 1px solid var(--border) !important;
-      padding: 4px !important;
-    }
-    /* Zebra stripes */
-    .tabulator .tabulator-row:nth-child(even) {
-      background: var(--stripe-even) !important;
+      background:var(--table-bg)!important;
+      color:var(--text)!important;
+      border:1px solid var(--border)!important;
+      padding:4px!important;
     }
     .tabulator .tabulator-row:nth-child(odd) {
-      background: var(--stripe-odd) !important;
+      background:var(--stripe-odd)!important;
     }
-    /* Hover */
+    .tabulator .tabulator-row:nth-child(even) {
+      background:var(--stripe-even)!important;
+    }
     .tabulator .tabulator-row:hover {
-      background: var(--hover-bg) !important;
-      color: #000 !important;
+      background:var(--hover-bg)!important;
+      color:#000!important;
     }
-    /* Group headers */
     .tabulator .tabulator-group-header {
-      background: var(--header-bg) !important;
-      color: var(--header-color) !important;
-      font-weight: bold !important;
-      border-bottom: 1px solid var(--border) !important;
+      background:var(--accent-dark)!important;
+      color:#fff!important;
+      font-weight:bold!important;
+      border-bottom:1px solid var(--border)!important;
     }
-    /* Cells */
     .tabulator .tabulator-cell {
-      padding: 6px !important;
-      font-size: 0.9em;
+      padding:6px!important; font-size:0.9em;
+      color:var(--text)!important;
     }
   </style>
 </head>
 <body>
+
+  <!-- LOGIN -->
+  <div id="login">
+    <div class="card">
+      <h1>Surfer Updates Login</h1>
+      <label for="user">Username</label>
+      <input id="user" type="text" autocomplete="username"/>
+      <label for="pass">Password</label>
+      <input id="pass" type="password" autocomplete="current-password"/>
+      <button id="btnLogin">Log In</button>
+      <div id="loginError" class="error">Invalid credentials</div>
+    </div>
+  </div>
+
+  <!-- APP -->
   <div id="app">
     <header>Surfer Updates Tracking</header>
     <div id="table">Loading…</div>
     <div id="file-input-wrapper">
       <p>Couldn’t auto-load. Please choose your Excel file:</p>
-      <input type="file" id="file-input" accept=".xlsx" />
+      <input type="file" id="file-input" accept=".xlsx"/>
     </div>
   </div>
 
-  <!-- Dependencies -->
+  <!-- DEPENDENCIES -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
   <script src="https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator.min.js"></script>
 
   <script>
-    // Excel serial → JS Date
-    function excelDateToJSDate(serial) {
-      return new Date((serial - 25569) * 86400 * 1000);
+    // LOGIN LOGIC
+    document.getElementById("btnLogin").addEventListener("click", ()=>{
+      const u = document.getElementById("user").value.trim();
+      const p = document.getElementById("pass").value.trim();
+      fetch("credentials.json")
+        .then(r=>r.json())
+        .then(creds=>{
+          if(u===creds.username && p===creds.password){
+            document.getElementById("login").style.display="none";
+            document.getElementById("app").style.display="flex";
+            initApp();
+          } else {
+            document.getElementById("loginError").style.display="";
+          }
+        })
+        .catch(()=>{
+          const e=document.getElementById("loginError");
+          e.innerText="Error loading credentials";
+          e.style.display="";
+        });
+    });
+
+    // EXCEL DATE → JS Date
+    function excelDateToJSDate(s){
+      return new Date((s-25569)*86400*1000);
     }
 
-    // Render grid
-    function renderTable(data) {
-      document.getElementById("table").style.display = "";
-      document.getElementById("file-input-wrapper").style.display = "none";
+    // RENDER TABLE
+    function renderTable(data){
+      document.getElementById("table").style.display="";
+      document.getElementById("file-input-wrapper").style.display="none";
 
       new Tabulator("#table", {
         data,
-        layout: "fitColumns",
-        autoColumns: false,
-        groupBy: "Site name",
-        groupStartOpen: false,
-        groupToggleElement: true,
-        groupHeader: (val, count) => `${val} (${count})`,
-        initialSort: [{ column: "Update Date", dir: "desc" }],
-        columns: [
-          { title: "Site name",        field: "Site name",        headerFilter: "input", width: 150 },
-          { title: "Surfer Version",   field: "Surfer Version",   headerFilter: "input", width: 150 },
-          { title: "Update Date",      field: "Update Date",      sorter: "date",
-            formatter: "datetime", formatterParams:{ outputFormat:"DD/MM/YYYY" },
-            headerFilter: "input", width: 150 },
-          { title: "Uwamp Version",    field: "Uwamp Version",    headerFilter: "input", width: 150 },
-          { title: "MySQL Version",    field: "Mysql Version",    headerFilter: "input", width: 150 },
-          { title: "Work assigned by", field: "Work assigned by", headerFilter: "input", width: 150 },
-          { title: "Work related to",  field: "Work related to",  headerFilter: "input", width: 150 },
-          { title: "Changes applied",  field: "Chages applied",    headerFilter: "input", widthGrow: 35 },
-          { title: "Comments",         field: "Comments",         headerFilter: "input", widthGrow: 65 },
+        layout:"fitColumns",
+        autoColumns:false,
+        groupBy:"Site name",
+        groupStartOpen:false,
+        groupToggleElement:true,
+        groupHeader:(v,c)=>`${v} (${c})`,
+        initialSort:[{column:"Update Date",dir:"desc"}],
+        columns:[
+          {title:"Site name",        field:"Site name",        headerFilter:"input", width:210},
+          {title:"Surfer Version",   field:"Surfer Version",   headerFilter:"input", width:150},
+          {title:"Update Date",      field:"Update Date",      sorter:"date",
+             formatter:"datetime", formatterParams:{outputFormat:"DD/MM/YYYY"},
+             headerFilter:"input", width:150},
+          {title:"Uwamp",    field:"Uwamp Version",    headerFilter:"input", width:150},
+          {title:"MySQ",    field:"Mysql Version",    headerFilter:"input", width:150},
+          {title:"Assigned by", field:"Work assigned by", headerFilter:"input", width:150},
+          {title:"Related to",  field:"Work related to",  headerFilter:"input", width:150},
+          {title:"Changes applied",  field:"Chages applied",    headerFilter:"input", widthGrow:35},
+          {title:"Comments",         field:"Comments",         headerFilter:"input", widthGrow:65},
         ],
       });
     }
 
-    // Parse Excel
-    function processWorkbook(buffer) {
-      const wb = XLSX.read(buffer, { type:"array" });
+    // PROCESS EXCEL
+    function processWorkbook(buffer){
+      const wb = XLSX.read(buffer,{type:"array"});
       const ws = wb.Sheets[wb.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(ws, { header:1, defval:"" });
-      const hdrIdx = rows.findIndex(r => r[0].toString().trim() === "Site name");
-      if (hdrIdx < 0) {
-        alert('Cannot find header row starting with "Site name".');
-        return;
-      }
-      const headers = rows[hdrIdx];
-      const dataRows = rows.slice(hdrIdx + 1)
-        .filter(r => r.some(c => c.toString().trim() !== ""));
-      const data = dataRows.map(row => {
-        const obj = {};
-        row.forEach((cell,i) => {
-          let v = cell;
-          if (headers[i] === "Update Date" && typeof cell === "number") {
-            v = excelDateToJSDate(cell);
-          }
-          obj[headers[i]] = v;
+      const rows = XLSX.utils.sheet_to_json(ws,{header:1,defval:""});
+      const hdr = rows.findIndex(r=>r[0].toString().trim()==="Site name");
+      if(hdr<0){ alert('Header row "Site name" not found'); return; }
+      const headers = rows[hdr];
+      const raw = rows.slice(hdr+1).filter(r=> r.some(c=>c.toString().trim()!==""));
+      const data = raw.map(r=>{
+        const o={};
+        r.forEach((c,i)=>{
+          let v=c;
+          if(headers[i]==="Update Date" && typeof c==="number") v=excelDateToJSDate(c);
+          o[headers[i]] = v;
         });
-        return obj;
+        return o;
       });
       renderTable(data);
     }
 
-    // Fallback file picker
-    function showPicker() {
-      document.getElementById("table").style.display = "none";
-      document.getElementById("file-input-wrapper").style.display = "";
+    // FALLBACK PICKER
+    function showPicker(){
+      document.getElementById("table").style.display="none";
+      document.getElementById("file-input-wrapper").style.display="";
       document.getElementById("file-input")
-        .addEventListener("change", e => {
-          const file = e.target.files[0];
-          if (!file) return;
-          const reader = new FileReader();
-          reader.onload = ev => processWorkbook(ev.target.result);
-          reader.readAsArrayBuffer(file);
+        .addEventListener("change", e=>{
+          const f=e.target.files[0];
+          if(!f) return;
+          const fr=new FileReader();
+          fr.onload=ev=>processWorkbook(ev.target.result);
+          fr.readAsArrayBuffer(f);
         });
     }
 
-    // Init: try fetch, else picker
-    function initApp() {
+    // INIT APP
+    function initApp(){
       fetch("surfer_updates.xlsx")
-        .then(r => { if (!r.ok) throw new Error(r.statusText); return r.arrayBuffer(); })
+        .then(r=>{ if(!r.ok) throw new Error(r.statusText); return r.arrayBuffer(); })
         .then(processWorkbook)
-        .catch(err => {
+        .catch(err=>{
           console.warn("Auto-load failed:", err);
           showPicker();
         });
     }
-
-    window.addEventListener("DOMContentLoaded", initApp);
   </script>
 </body>
 </html>
