@@ -4,10 +4,7 @@
   <meta charset="UTF-8" />
   <title>Surfer Updates Tracking</title>
   <!-- Tabulator CSS -->
-  <link
-    href="https://unpkg.com/tabulator-tables@5.4.4/dist/css/tabulator.min.css"
-    rel="stylesheet"
-  />
+  <link href="https://unpkg.com/tabulator-tables@5.4.4/dist/css/tabulator.min.css" rel="stylesheet"/>
   <style>
     :root {
       --page-bg: #f0f0f0;
@@ -15,18 +12,20 @@
       --header-bg: #00796b;
       --header-color: #ffffff;
       --stripe-even: #f9f9f9;
-      --stripe-odd: #ffffff;
-      --hover-bg: #c8e6c9;
-      --border: #dddddd;
-      --text: #333333;
+      --stripe-odd:  #ffffff;
+      --hover-bg:  #c8e6c9;
+      --border:    #dddddd;
+      --text:      #333333;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    * { box-sizing: border-box; margin:0; padding:0; }
     html, body {
-      height: 100%; width: 100%;
+      height:100%; width:100%;
       font-family: Arial, sans-serif;
       background: var(--page-bg);
       color: var(--text);
     }
+
     #app {
       display: flex;
       flex-direction: column;
@@ -55,47 +54,53 @@
       background: var(--table-bg);
     }
 
-    /* Tabulator light theme */
+    /* Tabulator light theme overrides */
     .tabulator {
       border: 1px solid var(--border) !important;
       border-radius: 4px !important;
       background: var(--table-bg) !important;
+      width: 100% !important;
     }
-    .tabulator-header {
-      background: var(--header-bg) !important;
+    /* Column headers */
+    .tabulator .tabulator-col {
+      background-color: var(--header-bg) !important;
       color: var(--header-color) !important;
-      font-weight: bold !important;
-      border-bottom: 2px solid var(--border) !important;
+      border-right: 1px solid var(--border) !important;
     }
-    .tabulator-header-filter input {
-      background: var(--stripe-even) !important;
+    .tabulator .tabulator-col:last-child {
+      border-right: none !important;
+    }
+    .tabulator .tabulator-col-title {
+      color: var(--header-color) !important;
+    }
+    /* Header filters row (inputs) */
+    .tabulator .tabulator-header-filter input {
+      background: var(--table-bg) !important;
       color: var(--text) !important;
       border: 1px solid var(--border) !important;
       padding: 4px !important;
     }
-    .tabulator-col, .tabulator-cell {
-      border-right: 1px solid var(--border) !important;
-    }
-    .tabulator-col:last-child, .tabulator-row .tabulator-cell:last-child {
-      border-right: none !important;
-    }
-    .tabulator-row:nth-child(even) {
+    /* Zebra stripes */
+    .tabulator .tabulator-row:nth-child(even) {
       background: var(--stripe-even) !important;
     }
-    .tabulator-row:nth-child(odd) {
+    .tabulator .tabulator-row:nth-child(odd) {
       background: var(--stripe-odd) !important;
     }
-    .tabulator-row:hover {
+    /* Hover */
+    .tabulator .tabulator-row:hover {
       background: var(--hover-bg) !important;
       color: #000 !important;
     }
-    .tabulator-group-header {
+    /* Group headers */
+    .tabulator .tabulator-group-header {
       background: var(--header-bg) !important;
       color: var(--header-color) !important;
       font-weight: bold !important;
       border-bottom: 1px solid var(--border) !important;
     }
-    .tabulator-cell {
+    /* Cells */
+    .tabulator .tabulator-cell {
       padding: 6px !important;
       font-size: 0.9em;
     }
@@ -122,7 +127,7 @@
       return new Date((serial - 25569) * 86400 * 1000);
     }
 
-    // Render the table
+    // Render grid
     function renderTable(data) {
       document.getElementById("table").style.display = "";
       document.getElementById("file-input-wrapper").style.display = "none";
@@ -137,39 +142,40 @@
         groupHeader: (val, count) => `${val} (${count})`,
         initialSort: [{ column: "Update Date", dir: "desc" }],
         columns: [
-          { title: "Site name",        field: "Site name",        headerFilter: "input" },
-          { title: "Surfer Version",   field: "Surfer Version",   headerFilter: "input" },
-          { title: "Update Date",      field: "Update Date",      sorter: "date", formatter: "datetime",
-            formatterParams:{ outputFormat:"DD/MM/YYYY" }, headerFilter:"input" },
-          { title: "Uwamp Version",    field: "Uwamp Version",    headerFilter: "input" },
-          { title: "MySQL Version",    field: "Mysql Version",    headerFilter: "input" },
-          { title: "Work assigned by", field: "Work assigned by", headerFilter: "input" },
-          { title: "Work related to",  field: "Work related to",  headerFilter: "input" },
-          { title: "Changes applied",  field: "Chages applied",    headerFilter: "input" },
-          { title: "Comments",         field: "Comments",         headerFilter: "input" },
+          { title: "Site name",        field: "Site name",        headerFilter: "input", width: 150 },
+          { title: "Surfer Version",   field: "Surfer Version",   headerFilter: "input", width: 150 },
+          { title: "Update Date",      field: "Update Date",      sorter: "date",
+            formatter: "datetime", formatterParams:{ outputFormat:"DD/MM/YYYY" },
+            headerFilter: "input", width: 150 },
+          { title: "Uwamp Version",    field: "Uwamp Version",    headerFilter: "input", width: 150 },
+          { title: "MySQL Version",    field: "Mysql Version",    headerFilter: "input", width: 150 },
+          { title: "Work assigned by", field: "Work assigned by", headerFilter: "input", width: 150 },
+          { title: "Work related to",  field: "Work related to",  headerFilter: "input", width: 150 },
+          { title: "Changes applied",  field: "Chages applied",    headerFilter: "input", widthGrow: 35 },
+          { title: "Comments",         field: "Comments",         headerFilter: "input", widthGrow: 65 },
         ],
       });
     }
 
-    // Parse workbook buffer
+    // Parse Excel
     function processWorkbook(buffer) {
-      const wb = XLSX.read(buffer, { type: "array" });
+      const wb = XLSX.read(buffer, { type:"array" });
       const ws = wb.Sheets[wb.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
+      const rows = XLSX.utils.sheet_to_json(ws, { header:1, defval:"" });
       const hdrIdx = rows.findIndex(r => r[0].toString().trim() === "Site name");
       if (hdrIdx < 0) {
         alert('Cannot find header row starting with "Site name".');
         return;
       }
       const headers = rows[hdrIdx];
-      const raw = rows.slice(hdrIdx + 1)
+      const dataRows = rows.slice(hdrIdx + 1)
         .filter(r => r.some(c => c.toString().trim() !== ""));
-      const data = raw.map(r => {
+      const data = dataRows.map(row => {
         const obj = {};
-        r.forEach((c,i) => {
-          let v = c;
-          if (headers[i] === "Update Date" && typeof c === "number") {
-            v = excelDateToJSDate(c);
+        row.forEach((cell,i) => {
+          let v = cell;
+          if (headers[i] === "Update Date" && typeof cell === "number") {
+            v = excelDateToJSDate(cell);
           }
           obj[headers[i]] = v;
         });
@@ -184,11 +190,11 @@
       document.getElementById("file-input-wrapper").style.display = "";
       document.getElementById("file-input")
         .addEventListener("change", e => {
-          const f = e.target.files[0];
-          if (!f) return;
-          const fr = new FileReader();
-          fr.onload = ev => processWorkbook(ev.target.result);
-          fr.readAsArrayBuffer(f);
+          const file = e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = ev => processWorkbook(ev.target.result);
+          reader.readAsArrayBuffer(file);
         });
     }
 
