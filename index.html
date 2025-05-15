@@ -10,11 +10,11 @@
   />
   <style>
     :root {
-      --bg: #1e1e1e;
+      --bg: #f4eaea;
       --surface: #2e2e2e;
-      --accent: #00796b;
+      --accent: #ffffff;
       --accent-light: #009688;
-      --text: #e0e0e0;
+      --text: #00796b;
       --text-muted: #aaa;
       --error: #d32f2f;
     }
@@ -79,11 +79,12 @@
 
     /* App-level styles */
     #table {
-      margin-top: 20px;
+      margin-top: 2px;
       border: 2px solid var(--accent);
       border-radius: 8px;
+	  width:98%;
       overflow: hidden;
-      height: 70vh;
+      height: 96vh;
       background: var(--surface);
     }
     .tabulator-header {
@@ -91,10 +92,10 @@
       color: #fff !important;
     }
     .tabulator-row:nth-child(even) {
-      background-color: #383838 !important;
+      background-color: #fae0ca !important;
     }
     .tabulator-row:nth-child(odd) {
-      background-color: #2e2e2e !important;
+      background-color: #dac1ac !important;
     }
     .tabulator-row:hover {
       background-color: var(--accent-light) !important;
@@ -106,7 +107,7 @@
     }
     #file-input-wrapper {
       text-align: center;
-      margin-top: 20px;
+      margin-top: 10px;
       color: var(--text-muted);
     }
   </style>
@@ -182,14 +183,14 @@
         groupHeader: (v, c) => `${v} (${c})`,
         initialSort: [{ column: "Update Date", dir: "desc" }],
         columns: [
-          { title: "Site name",        field: "Site name",       headerFilter: "input", frozen: true, width: 150 },
-          { title: "Surfer Version",   field: "Surfer Version",  headerFilter: "input", width: 120 },
+          { title: "Site name",        field: "Site name",       headerFilter: "input", frozen: true, width: 100 },
+          { title: "Surfer Version",   field: "Surfer Version",  headerFilter: "input", width: 100 },
           { title: "Update Date",      field: "Update Date",     sorter:"date", formatter:"datetime",
-            formatterParams:{outputFormat:"dd/MM/yyyy"}, headerFilter:"input", width: 130 },
-          { title: "Uwamp Version",    field: "Uwamp Version",   headerFilter: "input", width: 120 },
-          { title: "MySQL Version",    field: "Mysql Version",   headerFilter: "input", width: 120 },
-          { title: "Work assigned by", field: "Work assigned by", headerFilter: "input", width: 180 },
-          { title: "Work related to",  field: "Work related to",  headerFilter: "input", width: 160 },
+            formatterParams:{outputFormat:"dd/MM/yyyy"}, headerFilter:"input", width: 100 },
+          { title: "Uwamp Version",    field: "Uwamp Version",   headerFilter: "input", width: 100 },
+          { title: "MySQL Version",    field: "Mysql Version",   headerFilter: "input", width: 100 },
+          { title: "Work assigned by", field: "Work assigned by", headerFilter: "input", width: 120 },
+          { title: "Work related to",  field: "Work related to",  headerFilter: "input", width: 120 },
           { title: "Changes applied",  field: "Chages applied",   headerFilter: "input", width: 250 },
           { title: "Comments",         field: "Comments",        headerFilter: "input", width: 300 },
         ],
