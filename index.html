@@ -224,7 +224,7 @@
         columns:[
           {title:"Site name",        field:"Site name",        headerFilter:"input", width:210},
           {title:"Surfer Version",   field:"Surfer Version",   headerFilter:"input", width:150},
-          {title:"Update Date",      field:"Update Date",      headerFilter:"input", width:150},
+          {title: "Update Date",field: "Update Date",sorter: "date",formatter: "datetime",formatterParams: { outputFormat: "DD/MM/YYYY" },headerFilter: "input", width: 150}
           {title:"UwAmp",            field:"Uwamp Version",    headerFilter:"input", width:150},
           {title:"MySQL",            field:"Mysql Version",    headerFilter:"input", width:150},
           {title:"Assigned by",      field:"Work assigned by", headerFilter:"input", width:150},
@@ -248,7 +248,7 @@
         const o={};
         r.forEach((c,i)=>{
           let v=c;
-          if(headers[i]==="Update Date1" && typeof c==="number") v=excelDateToJSDate(c);
+          if(headers[i]==="Update Date" && typeof c==="number") v=excelDateToJSDate(c);
           o[headers[i]] = v;
         });
         return o;
